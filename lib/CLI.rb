@@ -32,7 +32,7 @@ class CLI
     when "1"
       search_by_name
     when "2"
-      puts "stub menu 2"
+      search_by_pokedex_num
     when "3"
       puts "stub menu 3"
     else 
@@ -46,7 +46,7 @@ class CLI
 
     until input == 'back'
       print Spacer + "\nPlease Enter a Pokemon name \nor 'back' to go back to main menu:".colorize(:light_black)
-      input = gets.chomp
+      input = gets.chomp.downcase
 
       if input == "back"
         system("clear")
@@ -58,6 +58,30 @@ class CLI
         validate = true     # stubs a valid search
         if validate == true
           puts Spacer + "\nStub Pokemon Data\n"
+          input = search_another_name?
+        end
+      end
+    end
+  end
+
+  def search_by_pokedex_num
+    system("clear")
+    input = nil
+ 
+    until input == 'back'
+      print Spacer + "\nPlease Enter a Pokedex Number\nor 'back' to go back to main menu:".colorize(:light_black)
+      input = gets.chomp.downcase
+
+      if input == "back"
+        system("clear")
+        return
+      else
+        # calls API for a request
+        # uses search history method / customer finder
+        
+        validate = true     # stubs a valid search
+        if validate == true
+          puts Spacer + "\nStub Pokemon Data 2\n"
           input = search_another_name?
         end
       end
