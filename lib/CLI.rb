@@ -1,4 +1,4 @@
-class PokemonCLI::CLI
+class CLI
   
   def call
     puts "Welcome to the Pokemon CLI gem!"
