@@ -1,2 +1,5 @@
 #!/usr/bin/env ruby
 
+require_relative "../config/enviornmentrb"
+
+PokemonCLI::CLI.new.call
