@@ -21,7 +21,7 @@ class CLI
   def main_menu
     puts Spacer + "\nWhat Would you like to do today?\n" .colorize(:light_black)
     puts "1. Search Pokemon by Name"
-    puts "2. Search Pokemon by Pokedex #"
+    puts "2. Search Pokemon by Pokedex Number"
     puts "3. Search Pokemon by Type"
     puts "4. Exit\n"
     print Spacer + "\nPlease Enter a Number 1 - 4:".colorize(:light_black)
@@ -79,25 +79,25 @@ class CLI
     when 1
       type = "Pokemon Name"
     when 2
-      type = "Pokemon Number"
+      type = "Pokedex Number"
     when 3
       type = "Type"
     end
-    
-    print Spacer + "\nPlease Enter a #{type} \nor 'back' to go back to main menu:".colorize(:light_black)
+
+    print Spacer + "\nPlease Enter a valid #{type} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
   def search_again?
     input = ""
 
-    until input == "n"
+    until input == "n" || input == "no"
       print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
       input = gets.chomp.downcase
 
-      if input == "y"
+      if input == "y" || input == "yes"
         system("clear") ; return
       else 
-        error_message unless input == "n"
+        error_message unless input == "n" || input == "no"
       end
     end
 
