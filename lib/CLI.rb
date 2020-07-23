@@ -47,6 +47,7 @@ class CLI
       input = gets.chomp.downcase
       
       if valid_input_type?(input) && input != 'back'
+        system("clear")
         # stubs a valid search
         # calls API for a request
         # API checks the user_input instance method for correct API request 
