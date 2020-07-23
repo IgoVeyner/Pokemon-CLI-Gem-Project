@@ -58,7 +58,7 @@ class CLI
         validate = true     # stubs a valid search
         if validate == true
           puts Spacer + "\nStub Pokemon Data\n"
-          input = search_another_name?
+          input = search_again?
         end
       end
     end
@@ -82,17 +82,17 @@ class CLI
         validate = true     # stubs a valid search
         if validate == true
           puts Spacer + "\nStub Pokemon Data 2\n"
-          input = search_another_name?
+          input = search_again?
         end
       end
     end
   end
 
-  def search_another_name?
+  def search_again?
     input = ""
 
     until input == "n"
-      print Spacer + "\nWould you like to search for another Pokemon? Y/N:".colorize(:light_black)
+      print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
       input = gets.chomp.downcase
 
       if input == "y"
