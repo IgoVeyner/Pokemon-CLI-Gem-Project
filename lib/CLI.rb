@@ -7,7 +7,7 @@ class CLI
     @user_input = nil
     greeting
 
-    until @user_input == "4"
+    until @user_input == 4
       main_menu
     end
 
@@ -26,66 +26,65 @@ class CLI
     puts "4. Exit\n"
     print Spacer + "\nPlease Enter a Number 1 - 4:".colorize(:light_black)
     
-    @user_input = gets.chomp
+    @user_input = gets.chomp.to_i
 
     case @user_input
-    when "1"
-      search_by_name
-    when "2"
-      search_by_pokedex_num
-    when "3"
+    when 1, 2
+      search_pokemon
+    when 3
       puts "stub menu 3"
     else 
-      error_message unless @user_input == "4"
+      error_message unless @user_input == 4
     end
   end
 
-  def search_by_name
+  def search_pokemon
     system("clear")
     input = nil
 
     until input == 'back'
-      print Spacer + "\nPlease Enter a Pokemon name \nor 'back' to go back to main menu:".colorize(:light_black)
+      search_input_prompt
       input = gets.chomp.downcase
-
-      if input == "back"
-        system("clear")
-        return
-      else
+      
+      if valid_input_type?(input) && input != 'back'
+        
+        # stubs a valid search
         # calls API for a request
         # uses search history method / customer finder
-        
-        validate = true     # stubs a valid search
-        if validate == true
-          puts Spacer + "\nStub Pokemon Data\n"
-          input = search_again?
-        end
+        puts Spacer + "\nStub Pokemon Data\n"
+        input = search_again?
+      
+      else 
+        error_message
       end
     end
+    system("clear")
   end
 
-  def search_by_pokedex_num
-    system("clear")
-    input = nil
- 
-    until input == 'back'
-      print Spacer + "\nPlease Enter a Pokedex Number\nor 'back' to go back to main menu:".colorize(:light_black)
-      input = gets.chomp.downcase
-
-      if input == "back"
-        system("clear")
-        return
-      else
-        # calls API for a request
-        # uses search history method / customer finder
-        
-        validate = true     # stubs a valid search
-        if validate == true
-          puts Spacer + "\nStub Pokemon Data 2\n"
-          input = search_again?
-        end
+  def valid_input_type?(input)
+    if @user_input == 1 || @user_input == 3
+      if input =~ /\d/
+        return false
+      end
+    else
+      if input =~ /\D/
+        return false
       end
     end
+    return true
+  end
+
+  def search_input_prompt
+    case @user_input
+    when 1
+      type = "Pokemon Name"
+    when 2
+      type = "Pokemon Number"
+    when 3
+      type = "Type"
+    end
+    
+    print Spacer + "\nPlease Enter a #{type} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
   def search_again?
