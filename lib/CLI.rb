@@ -2,6 +2,8 @@ class CLI
   
   Spacer = "----------------------------------------------------".colorize(:yellow)
 
+  attr_reader :user_input
+
   def call
     system("clear")
     @user_input = nil
@@ -29,16 +31,14 @@ class CLI
     @user_input = gets.chomp.to_i
 
     case @user_input
-    when 1, 2
-      search_pokemon
-    when 3
-      puts "stub menu 3"
+    when 1, 2, 3
+      search
     else 
       error_message unless @user_input == 4
     end
   end
 
-  def search_pokemon
+  def search
     system("clear")
     input = nil
 
@@ -47,11 +47,20 @@ class CLI
       input = gets.chomp.downcase
       
       if valid_input_type?(input) && input != 'back'
-        
         # stubs a valid search
         # calls API for a request
+        # API checks the user_input instance method for correct API request 
         # uses search history method / customer finder
-        puts Spacer + "\nStub Pokemon Data\n"
+        puts Spacer 
+        puts case @user_input 
+          when 1
+            "Stub Pokemon Data 1\n"
+          when 2
+            "Stub Pokemon Data 2\n"
+          when 3
+            "Stub Pokemon Data 3\n"
+          end
+
         input = search_again?
       
       else 
@@ -100,7 +109,6 @@ class CLI
         error_message unless input == "n" || input == "no"
       end
     end
-
     system("clear") ; "back"
   end
   
