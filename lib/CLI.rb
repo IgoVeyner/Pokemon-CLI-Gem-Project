@@ -7,6 +7,7 @@ class CLI
   def call
     system("clear")
     @user_input = nil
+    @api = APIService.new
     greeting
 
     until @user_input == 4
@@ -32,10 +33,12 @@ class CLI
 
     case @user_input
     when 1, 2, 3
+      @search_type = @user_input == 1 || @user_input == 2 ? "pokemon" : "type"
       search
     else 
       error_message unless @user_input == 4
     end
+      
   end
 
   def search
@@ -48,24 +51,29 @@ class CLI
       
       if valid_input_type?(input) && input != 'back'
         system("clear")
-        # stubs a valid search
-        # calls API for a request
-        # API checks the user_input instance method for correct API request 
-        # uses search history method / customer finder
-        puts Spacer 
-        puts case @user_input 
-          when 1
-            "Stub Pokemon Data 1\n"
-          when 2
-            "Stub Pokemon Data 2\n"
-          when 3
-            "Stub Pokemon Data 3\n"
+        
+        response = @api.make_request(@search_type, input)
+        if !response.is_a?(Net::HTTPSuccess)
+          puts "Sorry! #{input} is not a valid input.".colorize(:red)
+        else 
+          # API checks the user_input instance method for correct API request 
+          # uses search history method / customer finder
+          puts Spacer 
+          puts case @user_input 
+            when 1
+              "Stub Pokemon Data 1\n"
+            when 2
+              "Stub Pokemon Data 2\n"
+            when 3
+              "Stub Pokemon Data 3\n"
+            end
           end
 
         input = search_again?
       
       else 
         error_message
+        puts input + " is not a valid input type".colorize(:red)
       end
     end
     system("clear")
@@ -114,7 +122,7 @@ class CLI
   end
   
   def error_message
-    system("clear") ; puts Spacer + "\nSorry! I didn't understand that".colorize(:red)
+    system("clear") ; puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
   end
 
 end
