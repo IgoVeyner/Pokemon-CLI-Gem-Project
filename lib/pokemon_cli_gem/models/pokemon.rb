@@ -4,6 +4,7 @@ class Pokemon
 
   @@all = []
 
+  #get rid of all but name
   def initialize(name, pokedex_number = nil, height = nil, weight = nil, type = nil, pokedex_entry = nil) #refactor with mass assignment later
     @name = name
     @pokedex_number = pokedex_number if pokedex_number

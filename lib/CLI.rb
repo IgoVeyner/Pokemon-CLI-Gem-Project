@@ -51,15 +51,13 @@ class CLI
 
       if valid_input? && @user_search_input != 'back'
         system("clear")
-        @api.read_response(@response)
         
-        # uses search history method / customer finder to not request the api when unot needed
+        # uses search history method / customer finder to not request the api when not needed
         puts Spacer 
         puts case @user_main_menu_input 
-          when 1
-            "Stub Pokemon Data 1\n"
-          when 2
-            "Stub Pokemon Data 2\n"
+          when 1, 2
+            # @api.read_pokemon_response(@response)
+            "Stub Pokemon Data 1 / 2"
           when 3
             "Stub Pokemon Data 3\n"
           end
