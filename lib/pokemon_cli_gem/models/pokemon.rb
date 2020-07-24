@@ -1,17 +1,10 @@
 class Pokemon
-
-  attr_accessor :name, :pokedex_number, :height, :weight, :type, :pokedex_entry
+  attr_accessor :name, :height, :weight, :type1, :type2, :pokedex_entry
 
   @@all = []
 
-  #get rid of all but name
-  def initialize(name, pokedex_number = nil, height = nil, weight = nil, type = nil, pokedex_entry = nil) #refactor with mass assignment later
+  def initialize(name)
     @name = name
-    @pokedex_number = pokedex_number if pokedex_number
-    @height = height if height
-    @weight = weight if weight
-    @type if type
-    @pokedex_entry = pokedex_entry if pokedex_entry
   end
   
   def save
@@ -32,5 +25,15 @@ class Pokemon
 
   def self.find_or_create_by_name(name)
     self.find_by_name(name) || self.create(name)
+  end
+
+  def pretty_text
+    puts "#{self.name.capitalize}\n"
+    print "Type: #{self.type1.name.capitalize}" 
+    print "/#{self.type2.name.capitalize}" if self.type2 
+    print "\n"
+    puts "\n#{pokedex_entry}"
+    puts "\nHeight: #{(height *  3.937).round(2)} in / #{(height * 0.1).round(2)} m"
+    puts "Weight: #{(weight / 4.536).round(1)} lb / #{(weight * 0.1).round(2)} kg"
   end
 end

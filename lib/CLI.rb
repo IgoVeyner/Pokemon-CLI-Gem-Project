@@ -56,8 +56,8 @@ class CLI
         puts Spacer 
         puts case @user_main_menu_input 
           when 1, 2
-            # @api.read_pokemon_response(@response)
-            "Stub Pokemon Data 1 / 2"
+            pokemon = @api.read_pokemon_response(@response)
+            pokemon.pretty_text
           when 3
             "Stub Pokemon Data 3\n"
           end
