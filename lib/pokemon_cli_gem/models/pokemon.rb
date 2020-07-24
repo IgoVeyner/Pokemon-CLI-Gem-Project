@@ -4,8 +4,13 @@ class Pokemon
 
   @@all = []
 
-  def initialize(name, pokedex_number = nil, height = nil, type = nil, weight = nil, pokedex_entry = nil) #refactor with mass assignment later
+  def initialize(name, pokedex_number = nil, height = nil, weight = nil, type = nil, pokedex_entry = nil) #refactor with mass assignment later
     @name = name
+    @pokedex_number = pokedex_number if pokedex_number
+    @height = height if height
+    @weight = weight if weight
+    @type if type
+    @pokedex_entry = pokedex_entry if pokedex_entry
   end
   
   def save
