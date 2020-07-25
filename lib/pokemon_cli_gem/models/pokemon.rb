@@ -1,5 +1,8 @@
 class Pokemon
-  attr_accessor :name, :height, :weight, :types, :type1, :type2, :pokedex_entry
+  extend Findable::ClassMethods
+
+  attr_reader :name
+  attr_accessor :height, :weight, :types, :type1, :type2, :pokedex_entry
 
   @@all = []
 
@@ -18,14 +21,6 @@ class Pokemon
 
   def self.create(name)
     new(name).tap{|o| o.save}
-  end
-
-  def self.find_by_name(name)
-    self.all.find {|p| p.name == name}
-  end
-
-  def self.find_or_create_by_name(name)
-    self.find_by_name(name) || self.create(name)
   end
 
   def pretty_text

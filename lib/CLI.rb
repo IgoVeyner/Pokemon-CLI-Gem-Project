@@ -106,6 +106,7 @@ class CLI
     print Spacer + "\nPlease Enter a #{search} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
+
   def search_again?
     search_again_input = ""
     until search_again_input == "n" || search_again_input == "no"
@@ -121,22 +122,6 @@ class CLI
     system("clear"); 
     @user_search_menu_input = "back"
   end
-
-  # def search_again?
-  #   @user_search_menu_input = ""
-  #   until @user_search_menu_input == "n" || @user_search_menu_input == "no"
-  #     print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
-  #     @user_search_menu_input = gets.chomp.downcase
-
-  #     if @user_search_menu_input == "y" || @user_search_menu_input == "yes"
-  #       system("clear") ; return
-  #     else 
-  #       menu_error_message unless @user_search_menu_input == "n" || @user_search_menu_input == "no"
-  #     end
-  #   end
-  #   system("clear")
-  #   "back"
-  # end
   
   
   def menu_error_message

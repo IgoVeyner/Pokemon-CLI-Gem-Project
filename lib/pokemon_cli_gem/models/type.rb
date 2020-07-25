@@ -1,4 +1,6 @@
 class Type 
+  extend Findable::ClassMethods
+
   attr_reader :name
   attr_accessor :pokemon
 
@@ -19,14 +21,6 @@ class Type
 
   def self.create(name)
     new(name).tap{|o| o.save}
-  end
-
-  def self.find_by_name(name)
-    self.all.find {|p| p.name == name}
-  end
-
-  def self.find_or_create_by_name(name)
-    self.find_by_name(name) || self.create(name)
   end
 
   def self.find_or_create_through_pokemon_search(name, pokemon_instance)
