@@ -30,7 +30,7 @@ class APIService
         name = type["type"]["name"]
         p.types << Type.find_or_create_through_pokemon_search(name, p) unless p.types.include?(Type.find_by_name(name))
       end
-      puts p.pretty_text
+      print p.pretty_text
     end
   end
   
