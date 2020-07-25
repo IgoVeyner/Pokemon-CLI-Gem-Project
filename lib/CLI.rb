@@ -13,6 +13,7 @@ class CLI
     until @user_main_menu_input == 4
       main_menu
     end
+    binding.pry
     puts Spacer + "\nGoodbye!\n".colorize(:light_black) + Spacer
   end
 
@@ -64,25 +65,25 @@ class CLI
 
   def search_pokemon_by_name
     @user_search_menu_input = gets.chomp.downcase 
-    @api.make_pokemon_search_request(@user_search_menu_input)
+    @api.find_or_create_search_request(@user_search_menu_input, "pokemon") 
     (!(@user_search_menu_input.match(/ \d/)) && @api.valid_response?) ? print_pokemon_search : search_error_message
-    search_again?
+    @user_search_menu_input = search_again?
   end
 
 
   def search_pokemon_by_number
     @user_search_menu_input = gets.chomp
-    @api.make_pokemon_search_request(@user_search_menu_input)
+    @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
     (@user_search_menu_input.to_i > 0 && @api.valid_response?) ? print_pokemon_search : search_error_message
-    search_again?
+    @user_search_menu_input = search_again?
   end
 
 
   def search_by_type
     @user_search_menu_input = gets.chomp.downcase
-    @api.make_type_search_request(@user_search_menu_input)
+    @api.find_or_create_search_request(@user_search_menu_input, "type")
     (!(@user_search_menu_input.match?(/\d/)) && @api.valid_response?) ?  print_type_search : search_error_message
-    search_again?
+    @user_search_menu_input = search_again?
   end
 
   def print_pokemon_search
@@ -115,7 +116,7 @@ class CLI
       end
     end
     system("clear"); 
-    @user_search_menu_input = "back"
+    "back"
   end
   
   

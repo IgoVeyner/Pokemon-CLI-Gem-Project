@@ -1,25 +1,70 @@
 class APIService
   
-  attr_accessor :response
+  attr_accessor :current_response, :search_history
 
   BASE_URI = "https://pokeapi.co/api/v2/"
 
-  def make_pokemon_search_request(user_input)
-    uri = URI(BASE_URI + "pokemon/#{user_input}/")
-    @response = Net::HTTP.get_response(uri)
+  def initialize
+    @search_history = []
   end
 
-  def make_type_search_request(user_input)
-    uri = URI(BASE_URI + "type/#{user_input}/")
-    @response = Net::HTTP.get_response(uri)
+  def find_or_create_search_request(user_input, search_type)
+    if find_prev_search(user_input, search_type)
+      @current_response = self.search_history.find {|h| h[:input] == user_input && h[:search_type] == search_type}[:response]
+    else 
+      create_request(user_input, search_type)
+    end
+  end
+  
+  def create_request(user_input, search_type)
+    uri = URI(BASE_URI + "#{search_type}/#{user_input}/")
+    @current_response = Net::HTTP.get_response(uri)
+    save_search(user_input, search_type)
+  end
+  
+  
+  # not sure if individual request methods are better (more flexible) than a blanket request method... 
+    # def find_or_create_search_request(user_input, search_type)
+    #   if find_prev_search(user_input, search_type)
+    #     @current_response = self.search_history.find {|h| h[:input] == user_input && h[:search_type] == search_type}[:response]
+    #   else 
+    #     make_pokemon_search_request(user_input) if search_type = "pokemon"
+    #     make_type_search_request(user_input) if search_type = "type"
+    #     create_request(user_input, search_type)
+    #   end
+    # end
+  
+    # def make_pokemon_search_request(user_input)
+    #   uri = URI(BASE_URI + "pokemon/#{user_input}/")
+    #   @current_response = Net::HTTP.get_response(uri)
+    #   save_search(user_input, "pokemon")
+    # end
+
+    # def make_type_search_request(user_input)
+    #   uri = URI(BASE_URI + "type/#{user_input}/")
+    #   @current_response = Net::HTTP.get_response(uri)
+    #   save_search(user_input, "type")
+    # end
+
+  def save_search(user_input, search_type)
+    search_hash = Hash.new.tap do |hash|
+      hash[:input] = user_input
+      hash[:search_type] = search_type
+      hash[:response] = @current_response
+    end
+    @search_history << search_hash 
+  end
+
+  def find_prev_search(user_input, search_type)
+    self.search_history.find {|h| h[:input] == user_input && h[:search_type] == search_type}
   end
 
   def valid_response?
-    @response.is_a?(Net::HTTPSuccess)
+    @current_response.is_a?(Net::HTTPSuccess)
   end
 
   def read_pokemon_response
-    search = JSON.parse(@response.body)
+    search = JSON.parse(@current_response.body)
     Pokemon.find_or_create_by_name(search["name"]).tap do |p|
       p.height = search["height"]
       p.weight = search["weight"]
@@ -43,7 +88,7 @@ class APIService
   end
 
   def read_type_response
-    search = JSON.parse(@response.body)
+    search = JSON.parse(@current_response.body)
     Type.find_or_create_by_name(search["name"]).tap do |type_instance|
       search["pokemon"].each do |pokemon|
         name = pokemon["pokemon"]["name"]
