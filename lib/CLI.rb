@@ -64,23 +64,36 @@ class CLI
 
   def search_pokemon_by_name 
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon") 
-    (!(@user_search_menu_input.match(/ \d/)) && @api.valid_response?) ? print_pokemon_search : search_error_message
-    @user_search_menu_input = search_again?
+    if !(@user_search_menu_input.match(/ \d/)) && @api.valid_response?
+      print_pokemon_search
+      @user_search_menu_input = search_again?
+    else
+      search_error_message
+    end
   end
 
 
   def search_pokemon_by_number
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
-    (@user_search_menu_input.to_i > 0 && @api.valid_response?) ? print_pokemon_search : search_error_message
-    @user_search_menu_input = search_again?
+    if @user_search_menu_input.to_i > 0 && @api.valid_response?
+      print_pokemon_search 
+      @user_search_menu_input = search_again?
+    else
+      search_error_message
+    end
   end
 
 
   def search_by_type
     @api.find_or_create_search_request(@user_search_menu_input, "type")
-    (!(@user_search_menu_input.match?(/\d/)) && @api.valid_response?) ?  print_type_search : search_error_message
-    @user_search_menu_input = search_again?
+    if !(@user_search_menu_input.match?(/\d/)) && @api.valid_response?
+      print_type_search 
+      @user_search_menu_input = search_again?
+    else
+      search_error_message
+    end
   end
+
 
   def print_pokemon_search
     system("clear") 
@@ -88,11 +101,13 @@ class CLI
     @api.read_pokemon_response
   end
 
+
   def print_type_search
     system("clear")
     puts Spacer
     @api.read_type_response
   end
+
 
   def search_input_prompt
     search_type = case @user_main_menu_input
@@ -119,8 +134,7 @@ class CLI
         menu_error_message unless search_again_input == "n" || search_again_input == "no"
       end
     end
-    system("clear"); 
-    "back"
+    system("clear") ; "back"
   end
   
   
