@@ -2,7 +2,7 @@ class CLI
   
   Spacer = "--------------------------------------------------------".colorize(:yellow)
 
-  attr_reader :user_main_menu_input, :user_search_input, :api, :response
+  attr_reader :user_main_menu_input, :user_search_menu_input, :api, :response
 
   def call
     system("clear")
@@ -13,6 +13,7 @@ class CLI
     until @user_main_menu_input == 4
       main_menu
     end
+    binding.pry
     puts Spacer + "\nGoodbye!\n".colorize(:light_black) + Spacer
   end
 
@@ -32,102 +33,119 @@ class CLI
     @user_main_menu_input = gets.chomp.to_i
 
     case @user_main_menu_input
-    when 1, 2, 3
-      @search_type = @user_main_menu_input == 1 || @user_main_menu_input == 2 ? "pokemon" : "type"
-      search
+    when 1, 2, 3 
+      search_menu
     else 
-      main_error_message unless @user_main_menu_input == 4
+      menu_error_message unless @user_main_menu_input == 4
     end
   end
 
 
-  def search
+  def search_menu
     system("clear")
-    @user_search_input = nil
+    @user_search_menu_input = nil
 
-    until @user_search_input == 'back'
-      search_input_prompt
-      @user_search_input = gets.chomp.downcase  
+    until @user_search_menu_input == 'back'
 
-      if valid_input? && @user_search_input != 'back'
-        system("clear")
-        
-        # uses search history method / customer finder to not request the api when not needed
-        puts Spacer 
-        case @user_main_menu_input 
-        when 1, 2
-          @api.read_pokemon_response(@response)
-        when 3
-          @api.read_type_response(@response)
-        end
-
-        @user_search_input = search_again?
-      else 
-        system("clear")
-        puts Spacer + "\nSorry! ".colorize(:red) + @user_search_input + " is not a valid input.".colorize(:red)
-      end
-    end
-    system("clear")
-  end
-
-
-  def valid_input?
-    valid_input_type? && good_response?
-  end
-  
-
-  def valid_input_type?
-    case @user_main_menu_input
-    when 1, 3
-      if @user_search_input =~ /\d/ 
-        false
-      end
-    when 2
-      if @user_search_input =~ /\D/
-        false
-      end
-    end
-    true
-  end
-  
-
-  def good_response?
-    @response = @api.make_request(@search_type, @user_search_input)
-    @response.is_a?(Net::HTTPSuccess)
-  end
-
-
-  def search_input_prompt
-    search = case @user_main_menu_input
+      case @user_main_menu_input 
       when 1
-        "Pokemon Name"
+        search_input_prompt("Pokemon Name")
+        search_pokemon_by_name
       when 2
-        "Pokedex Number"
+        search_input_prompt("Pokemon Number")
+        search_pokemon_by_number
       when 3
-        "Type"
+        search_input_prompt("Type")
+        search_by_type
       end
+    end
+    system("clear")
+  end
+
+
+  def search_pokemon_by_name
+    @user_search_menu_input = gets.chomp.downcase 
+    @api.make_pokemon_search_request(@user_search_menu_input)
+    if @user_search_menu_input.match(/\d/) == nil && @api.valid_response?
+      system("clear"); puts Spacer
+      @api.read_pokemon_response 
+    else 
+      search_error_message
+    end
+    search_again?
+  end
+
+
+  def search_pokemon_by_number
+    @user_search_menu_input = gets.chomp
+    @api.make_pokemon_search_request(@user_search_menu_input)
+    if @user_search_menu_input.to_i > 0 && @api.valid_response?
+      system("clear") ;puts Spacer
+      @api.read_pokemon_response
+    else 
+      search_error_message
+    end
+    search_again?
+  end
+
+
+  def search_by_type
+    @user_search_menu_input = gets.chomp.downcase
+    @api.make_type_search_request(@user_search_menu_input)
+    if @user_search_menu_input.match(/\d/) == nil  && @api.valid_response?
+      system("clear"); puts Spacer
+      @api.read_type_response
+    else 
+      search_error_message
+    end
+    search_again?
+  end
+
+
+  def search_input_prompt(search)
     print Spacer + "\nPlease Enter a #{search} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
-
   def search_again?
-    @user_search_input = ""
-    until @user_search_input == "n" || @user_search_input == "no"
+    search_again_input = ""
+    until search_again_input == "n" || search_again_input == "no"
       print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
-      @user_search_input = gets.chomp.downcase
+      search_again_input = gets.chomp.downcase
 
-      if @user_search_input == "y" || @user_search_input == "yes"
+      if search_again_input == "y" || search_again_input == "yes"
         system("clear") ; return
       else 
-        main_error_message unless @user_search_input == "n" || @user_search_input == "no"
+        menu_error_message unless search_again_input == "n" || search_again_input == "no"
       end
     end
-    system("clear") ; "back"
+    system("clear"); 
+    @user_search_menu_input = "back"
   end
+
+  # def search_again?
+  #   @user_search_menu_input = ""
+  #   until @user_search_menu_input == "n" || @user_search_menu_input == "no"
+  #     print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
+  #     @user_search_menu_input = gets.chomp.downcase
+
+  #     if @user_search_menu_input == "y" || @user_search_menu_input == "yes"
+  #       system("clear") ; return
+  #     else 
+  #       menu_error_message unless @user_search_menu_input == "n" || @user_search_menu_input == "no"
+  #     end
+  #   end
+  #   system("clear")
+  #   "back"
+  # end
   
   
-  def main_error_message
+  def menu_error_message
     system("clear") ; puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
   end
 
+
+  def search_error_message
+    system("clear")
+    puts Spacer + "\nSorry! ".colorize(:red) + @user_search_menu_input + " is not a valid input.".colorize(:red)
+  end
 end
