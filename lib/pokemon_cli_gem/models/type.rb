@@ -12,7 +12,7 @@ class Type
   end
 
   def self.find_or_create_through_pokemon_search(name, pokemon_instance)
-    self.find_or_create_by_name(name).tap {|o| o.pokemon << pokemon_instance}
+    self.find_or_create_by_name(name).tap {|o| o.pokemon << pokemon_instance unless o.pokemon.include?(pokemon_instance)}
   end
 
   def print_all
