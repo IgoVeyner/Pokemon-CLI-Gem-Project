@@ -29,7 +29,11 @@ class Type
     self.find_by_name(name) || self.create(name)
   end
 
-  def self.find_or_create_through_pokemon(name, pokemon_instance)
+  def self.find_or_create_through_pokemon_search(name, pokemon_instance)
     self.find_or_create_by_name(name).tap {|o| o.pokemon << pokemon_instance}
+  end
+
+  def print_all
+    self.pokemon.each.with_index(1) {|p,i| puts "#{i}. #{p.name}"}
   end
 end

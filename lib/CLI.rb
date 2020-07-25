@@ -1,6 +1,6 @@
 class CLI
   
-  Spacer = "----------------------------------------------------".colorize(:yellow)
+  Spacer = "--------------------------------------------------------".colorize(:yellow)
 
   attr_reader :user_main_menu_input, :user_search_input, :api, :response
 
@@ -18,7 +18,7 @@ class CLI
 
 
   def greeting
-    puts Spacer + "\n" + "Welcome to the Pokemon CLI gem!".colorize(:light_black)
+    puts Spacer + "\nWelcome to the Pokemon CLI gem!".colorize(:light_black)
   end
 
 
@@ -54,15 +54,14 @@ class CLI
         
         # uses search history method / customer finder to not request the api when not needed
         puts Spacer 
-        puts case @user_main_menu_input 
-          when 1, 2
-            pokemon = @api.read_pokemon_response(@response)
-            pokemon.pretty_text
-          when 3
-            "Stub Pokemon Data 3\n"
-          end
+        case @user_main_menu_input 
+        when 1, 2
+          @api.read_pokemon_response(@response)
+        when 3
+          @api.read_type_response(@response)
+        end
 
-          @user_search_input = search_again?
+        @user_search_input = search_again?
       else 
         system("clear")
         puts Spacer + "\nSorry! ".colorize(:red) + @user_search_input + " is not a valid input.".colorize(:red)
@@ -80,11 +79,11 @@ class CLI
   def valid_input_type?
     case @user_main_menu_input
     when 1, 3
-      if @user_search_input =~ /\d/ #can't use numbers when searching for a name
+      if @user_search_input =~ /\d/ 
         false
       end
     when 2
-      if @user_search_input =~ /\D/ #can't use letters when searching for a number
+      if @user_search_input =~ /\D/
         false
       end
     end
@@ -107,7 +106,7 @@ class CLI
       when 3
         "Type"
       end
-    print Spacer + "\nPlease Enter a valid #{search} \nor 'back' to go back to main menu:".colorize(:light_black)
+    print Spacer + "\nPlease Enter a #{search} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
 
