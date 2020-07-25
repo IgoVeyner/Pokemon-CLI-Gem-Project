@@ -13,7 +13,6 @@ class CLI
     until @user_main_menu_input == 4
       main_menu
     end
-    binding.pry
     puts Spacer + "\nGoodbye!\n".colorize(:light_black) + Spacer
   end
 
@@ -46,25 +45,24 @@ class CLI
     @user_search_menu_input = nil
 
     until @user_search_menu_input == 'back'
-
-      case @user_main_menu_input 
-      when 1
-        search_input_prompt("Pokemon Name")
-        search_pokemon_by_name
-      when 2
-        search_input_prompt("Pokemon Number")
-        search_pokemon_by_number
-      when 3
-        search_input_prompt("Type")
-        search_by_type
+      search_input_prompt
+      @user_search_menu_input = gets.chomp.downcase
+      unless @user_search_menu_input == 'back'
+        case @user_main_menu_input
+        when 1
+          search_pokemon_by_name
+        when 2
+          search_pokemon_by_number
+        when 3
+          search_by_type
+        end
       end
     end
     system("clear")
   end
 
 
-  def search_pokemon_by_name
-    @user_search_menu_input = gets.chomp.downcase 
+  def search_pokemon_by_name 
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon") 
     (!(@user_search_menu_input.match(/ \d/)) && @api.valid_response?) ? print_pokemon_search : search_error_message
     @user_search_menu_input = search_again?
@@ -72,7 +70,6 @@ class CLI
 
 
   def search_pokemon_by_number
-    @user_search_menu_input = gets.chomp
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
     (@user_search_menu_input.to_i > 0 && @api.valid_response?) ? print_pokemon_search : search_error_message
     @user_search_menu_input = search_again?
@@ -80,7 +77,6 @@ class CLI
 
 
   def search_by_type
-    @user_search_menu_input = gets.chomp.downcase
     @api.find_or_create_search_request(@user_search_menu_input, "type")
     (!(@user_search_menu_input.match?(/\d/)) && @api.valid_response?) ?  print_type_search : search_error_message
     @user_search_menu_input = search_again?
@@ -98,8 +94,16 @@ class CLI
     @api.read_type_response
   end
 
-  def search_input_prompt(search)
-    print Spacer + "\nPlease Enter a #{search} \nor 'back' to go back to main menu:".colorize(:light_black)
+  def search_input_prompt
+    search_type = case @user_main_menu_input
+      when 1 
+        "Pokemon Name"
+      when 2
+        "Pokedex Number"
+      when 3
+        "Type"
+      end
+    print Spacer + "\nPlease Enter a #{search_type} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
 
