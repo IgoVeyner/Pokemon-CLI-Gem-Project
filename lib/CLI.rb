@@ -13,7 +13,6 @@ class CLI
     until @user_main_menu_input == 4
       main_menu
     end
-    binding.pry
     puts Spacer + "\nGoodbye!\n".colorize(:light_black) + Spacer
   end
 
@@ -66,12 +65,7 @@ class CLI
   def search_pokemon_by_name
     @user_search_menu_input = gets.chomp.downcase 
     @api.make_pokemon_search_request(@user_search_menu_input)
-    if @user_search_menu_input.match(/\d/) == nil && @api.valid_response?
-      system("clear"); puts Spacer
-      @api.read_pokemon_response 
-    else 
-      search_error_message
-    end
+    (!(@user_search_menu_input.match(/ \d/)) && @api.valid_response?) ? print_pokemon_search : search_error_message
     search_again?
   end
 
@@ -79,12 +73,7 @@ class CLI
   def search_pokemon_by_number
     @user_search_menu_input = gets.chomp
     @api.make_pokemon_search_request(@user_search_menu_input)
-    if @user_search_menu_input.to_i > 0 && @api.valid_response?
-      system("clear") ;puts Spacer
-      @api.read_pokemon_response
-    else 
-      search_error_message
-    end
+    (@user_search_menu_input.to_i > 0 && @api.valid_response?) ? print_pokemon_search : search_error_message
     search_again?
   end
 
@@ -92,15 +81,21 @@ class CLI
   def search_by_type
     @user_search_menu_input = gets.chomp.downcase
     @api.make_type_search_request(@user_search_menu_input)
-    if @user_search_menu_input.match(/\d/) == nil  && @api.valid_response?
-      system("clear"); puts Spacer
-      @api.read_type_response
-    else 
-      search_error_message
-    end
+    (!(@user_search_menu_input.match?(/\d/)) && @api.valid_response?) ?  print_type_search : search_error_message
     search_again?
   end
 
+  def print_pokemon_search
+    system("clear") 
+    puts Spacer
+    @api.read_pokemon_response
+  end
+
+  def print_type_search
+    system("clear")
+    puts Spacer
+    @api.read_type_response
+  end
 
   def search_input_prompt(search)
     print Spacer + "\nPlease Enter a #{search} \nor 'back' to go back to main menu:".colorize(:light_black)
