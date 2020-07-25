@@ -6,6 +6,7 @@ require "net/http"
 require "json"
 
 # Classes
+require_relative "../lib/pokemon_cli_gem/concerns/persistable.rb"
 require_relative "../lib/pokemon_cli_gem/concerns/findable.rb"
 require_relative "../lib/pokemon_cli_gem/models/pokemon.rb"
 require_relative "../lib/pokemon_cli_gem/models/type.rb"

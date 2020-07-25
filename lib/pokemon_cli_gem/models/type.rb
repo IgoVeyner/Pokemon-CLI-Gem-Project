@@ -1,26 +1,14 @@
 class Type 
   extend Findable::ClassMethods
+  extend Persistable::ClassMethods
+  include Persistable::InstanceMethods
 
   attr_reader :name
   attr_accessor :pokemon
-
-  @@all = []
   
   def initialize(name)
-    @name = name
+    super(name)
     @pokemon = []
-  end
-  
-  def save
-    self.class.all << self
-  end
-
-  def self.all
-    @@all
-  end
-
-  def self.create(name)
-    new(name).tap{|o| o.save}
   end
 
   def self.find_or_create_through_pokemon_search(name, pokemon_instance)

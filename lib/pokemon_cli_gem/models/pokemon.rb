@@ -1,26 +1,14 @@
 class Pokemon
   extend Findable::ClassMethods
+  extend Persistable::ClassMethods
+  include Persistable::InstanceMethods
 
   attr_reader :name
   attr_accessor :height, :weight, :types, :type1, :type2, :pokedex_entry
 
-  @@all = []
-
   def initialize(name)
-    @name = name
+    super(name)
     @types = []
-  end
-  
-  def save
-    self.class.all << self
-  end
-
-  def self.all
-    @@all
-  end
-
-  def self.create(name)
-    new(name).tap{|o| o.save}
   end
 
   def pretty_text
