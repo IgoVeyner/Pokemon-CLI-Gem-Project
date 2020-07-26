@@ -16,7 +16,6 @@ class CLI
     puts Spacer 
     puts "Goodbye!".colorize(:light_black)
     puts Spacer
-    binding.pry
   end
 
   # Prints greeting
