@@ -130,22 +130,25 @@ class CLI
   end
 
   # Asks if the user wants to do the search again
-  # If yes, will update instance variable to stay in search_menu loop
-  # If no, will update instance variable to break out of the search_menu loop and back into main menu loop
+  # If yes, will break out of search_again_menu loop and return into search_menu_loop
+  # If no, will update instance variable to break out of both search_again_loop and search_menu loop back into main menu loop
   def search_again_menu
     search_again_input = ""
-    print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
-    search_again_input = gets.chomp.downcase
 
-    case search_again_input
-    when "y", "yes"
-      system("clear")
-    when "n", "no"
-      system("clear")
-      @user_search_menu_input = "back"
-    else
-      menu_error_message
+    until search_again_input == "n" || search_again_input == "no"
+      print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
+      search_again_input = gets.chomp.downcase
+      
+      case search_again_input
+      when "y", "yes"
+        system("clear")
+        return
+      else
+        menu_error_message
+      end
     end
+    system("clear")
+    @user_search_menu_input = "back"
   end
 
   # error message in main menu & search_again_menu
