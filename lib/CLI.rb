@@ -39,7 +39,7 @@ class CLI
     end
   end
 
-  # prints the search menu, asks for input, returns to main menu when input is 'back'
+  # Prints the search menu, asks for input, returns to main menu when input is 'back'
   def search_menu
     system("clear")
     @user_search_menu_input = nil
@@ -61,6 +61,12 @@ class CLI
     system("clear")
   end
 
+    # These three methods 'smell'. They are very similar and could be combined into one...
+    # I would need to use helper methods with case statments looking at the @user_main_menu_input to provide functionality
+    # Is that the right thing to do?
+    # Will it make adding features harder or easier in the future?
+    # Should I be relying on a conditional statement that much?
+  
   # Asks APIService to find or create a search request, 
   # prints response and asks if you want to do another search
   # prints an error when invalid response or input error
@@ -74,7 +80,9 @@ class CLI
     end
   end
 
-
+  # Asks APIService to find or create a search request, 
+  # prints response and asks if you want to do another search
+  # prints an error when invalid response or input error
   def search_pokemon_by_number
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
     if @user_search_menu_input.to_i > 0 && @api.valid_response?
@@ -85,7 +93,9 @@ class CLI
     end
   end
 
-
+  # Asks APIService to find or create a search request, 
+  # prints response and asks if you want to do another search
+  # prints an error when invalid response or input error
   def search_by_type
     @api.find_or_create_search_request(@user_search_menu_input, "type")
     if !(@user_search_menu_input.match?(/\d/)) && @api.valid_response?
@@ -96,21 +106,29 @@ class CLI
     end
   end
 
+    # These two methods could be combined into one
+    # APIService could handle which method to use if I made a response_type instance variable for it
+    # or this class can, it's not the APIService's job to handle that...
+    # Would be relying on conditional statement again...
+    # Is that good design?
+    # Will it make adding features easier?
+    # Probably ok to do it..
 
+  # Asks api to read the response
   def print_pokemon_search
     system("clear") 
     puts Spacer
     @api.read_pokemon_response
   end
 
-
+  # Asks api to read the response
   def print_type_search
     system("clear")
     puts Spacer
     @api.read_type_response
   end
 
-
+  # Prints propmt for search menu, checks instance variable for correct search type in prompt
   def search_input_prompt
     search_type = case @user_main_menu_input
       when 1 
@@ -123,7 +141,9 @@ class CLI
     print Spacer + "\nPlease Enter a #{search_type} \nor 'back' to go back to main menu:".colorize(:light_black)
   end
 
-
+  # Asks if the user wants to do the search again
+  # If yes, will update instance variable to stay in search_menu loop
+  # If no, will update instance variable to break out of the search_menu loop and back into main menu loop
   def search_again_menu
     search_again_input = ""
     print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
@@ -141,13 +161,13 @@ class CLI
     end
   end
 
-  
+  # error message in main menu & search_again_menu
   def menu_error_message
     system("clear")
     puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
   end
 
-
+  # error message if bad input type or bad response
   def search_error_message
     system("clear")
     puts Spacer + "\nSorry! ".colorize(:red) + @user_search_menu_input + " is not a valid input.".colorize(:red)

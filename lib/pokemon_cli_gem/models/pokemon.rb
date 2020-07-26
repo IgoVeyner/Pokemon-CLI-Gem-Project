@@ -11,6 +11,7 @@ class Pokemon
     @types = []
   end
 
+  # Prints the Pokemon's data, nice and pretty
   def pretty_text
     puts "#{self.name.capitalize}\n"
     print "Type: #{self.type1.capitalize}" 
