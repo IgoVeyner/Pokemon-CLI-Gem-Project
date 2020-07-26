@@ -5,7 +5,6 @@ class CLI
   attr_reader :user_main_menu_input, :user_search_menu_input, :api, :response
 
   def call
-    # binding.pry
     system("clear")
     @user_main_menu_input = nil
     @api = APIService.new
@@ -17,12 +16,12 @@ class CLI
     puts Spacer + "\nGoodbye!\n".colorize(:light_black) + Spacer
   end
 
-
+  # Prints greeting
   def greeting
     puts Spacer + "\nWelcome to the Pokemon CLI gem!".colorize(:light_black)
   end
 
-
+  # Prints main menu, asks for user input, exits when user input is '4'
   def main_menu
     puts Spacer + "\nWhat Would you like to do today?\n" .colorize(:light_black)
     puts "1. Search Pokemon by Name"
@@ -40,7 +39,7 @@ class CLI
     end
   end
 
-
+  # prints the search menu, asks for input, returns to main menu when input is 'back'
   def search_menu
     system("clear")
     @user_search_menu_input = nil
@@ -62,12 +61,14 @@ class CLI
     system("clear")
   end
 
-
+  # Asks APIService to find or create a search request, 
+  # prints response and asks if you want to do another search
+  # prints an error when invalid response or input error
   def search_pokemon_by_name 
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon") 
     if !(@user_search_menu_input.match(/ \d/)) && @api.valid_response?
       print_pokemon_search
-      @user_search_menu_input = search_again?
+      search_again_menu
     else
       search_error_message
     end
@@ -78,7 +79,7 @@ class CLI
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
     if @user_search_menu_input.to_i > 0 && @api.valid_response?
       print_pokemon_search 
-      @user_search_menu_input = search_again?
+      search_again_menu
     else
       search_error_message
     end
@@ -89,7 +90,7 @@ class CLI
     @api.find_or_create_search_request(@user_search_menu_input, "type")
     if !(@user_search_menu_input.match?(/\d/)) && @api.valid_response?
       print_type_search 
-      @user_search_menu_input = search_again?
+      search_again_menu
     else
       search_error_message
     end
@@ -123,23 +124,23 @@ class CLI
   end
 
 
-  def search_again?
+  def search_again_menu
     search_again_input = ""
-    until search_again_input == "n" || search_again_input == "no"
-      print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
-      search_again_input = gets.chomp.downcase
+    print Spacer + "\nWould you like to do another search? Y/N:".colorize(:light_black)
+    search_again_input = gets.chomp.downcase
 
-      if search_again_input == "y" || search_again_input == "yes"
-        system("clear")
-        return
-      else 
-        menu_error_message unless search_again_input == "n" || search_again_input == "no"
-      end
+    case search_again_input
+    when "y", "yes"
+      system("clear")
+      @user_search_menu_input = nil
+    when "n", "no"
+      system("clear")
+      @user_search_menu_input = "back"
+    else
+      menu_error_message
     end
-    system("clear")
-    "back"
   end
-  
+
   
   def menu_error_message
     system("clear")
