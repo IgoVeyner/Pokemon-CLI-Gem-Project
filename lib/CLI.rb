@@ -152,7 +152,6 @@ class CLI
     case search_again_input
     when "y", "yes"
       system("clear")
-      @user_search_menu_input = nil
     when "n", "no"
       system("clear")
       @user_search_menu_input = "back"
