@@ -63,7 +63,7 @@ class CLI
             search_error_message
           end
         else
-          search_error_message
+          input_type_error
         end
       end
     end
@@ -74,9 +74,9 @@ class CLI
   def valid_input_type?
     case @user_main_menu_input
     when 1, 3
-      !@user_search_menu_input.match(/ \d/)
+      !@user_search_menu_input.match?(/\d/)
     when 2
-      @user_search_menu_input.to_i > 0
+      !@user_search_menu_input.match?(/\D/)
     end
   end
 
@@ -105,7 +105,7 @@ class CLI
 
   # Asks if the user wants to do the search again
   # If yes, will break out of search_again_menu loop and return into search_menu_loop
-  # If no, will update instance variable to break out of both search_again_loop and search_menu loop back into main menu loop
+  # If no, will update instance variable to break out of both search_again_loop and search_menu loop back into main_menu loop
   def search_again_menu
     search_again_input = ""
 
@@ -131,9 +131,22 @@ class CLI
     puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
   end
 
-  # error message if bad input type or bad response
+  # if user input creates bad response
   def search_error_message
     system("clear")
     puts Spacer + "\nSorry! ".colorize(:red) + @user_search_menu_input + " is not a valid input.".colorize(:red)
+  end
+  
+  # if user enters the wrong type
+  def input_type_error
+    system("clear")
+    puts Spacer
+    type = case @user_main_menu_input
+      when 1, 3
+        "numbers"
+      when 2
+        "letters"
+      end
+    puts "Sorry! No #{type} please!".colorize(:red)
   end
 end
