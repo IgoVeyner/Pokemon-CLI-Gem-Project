@@ -33,6 +33,11 @@ class CLI
 
     case @user_main_menu_input
     when 1, 2, 3 
+      @api_search_type = if @user_main_menu_input == 1 || @user_main_menu_input == 2
+          "pokemon"
+        else 
+          "type"
+        end
       search_menu
     else 
       menu_error_message unless @user_main_menu_input == 4
@@ -47,62 +52,31 @@ class CLI
     until @user_search_menu_input == 'back'
       search_input_prompt
       @user_search_menu_input = gets.chomp.downcase
+
       unless @user_search_menu_input == 'back'
-        case @user_main_menu_input
-        when 1
-          search_pokemon_by_name
-        when 2
-          search_pokemon_by_number
-        when 3
-          search_by_type
+        if valid_input_type?
+          @api.find_or_create_search_request(@user_search_menu_input, @api_search_type)
+          if @api.valid_response?
+            print_search_results
+            search_again_menu
+          else 
+            search_error_message
+          end
+        else
+          search_error_message
         end
       end
     end
     system("clear")
   end
-
-    # These three methods 'smell'. They are very similar and could be combined into one...
-    # I would need to use helper methods with case statments looking at the @user_main_menu_input to provide functionality
-    # Is that the right thing to do?
-    # Will it make adding features harder or easier in the future?
-    # Should I be relying on a conditional statement that much?
   
-  # Asks APIService to find or create a search request, 
-  # prints response and asks if you want to do another search
-  # prints an error when invalid response or input error
-  def search_pokemon_by_name 
-    @api.find_or_create_search_request(@user_search_menu_input, "pokemon") 
-    if !(@user_search_menu_input.match(/ \d/)) && @api.valid_response?
-      print_search_results
-      search_again_menu
-    else
-      search_error_message
-    end
-  end
-
-  # Asks APIService to find or create a search request, 
-  # prints response and asks if you want to do another search
-  # prints an error when invalid response or input error
-  def search_pokemon_by_number
-    @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
-    if @user_search_menu_input.to_i > 0 && @api.valid_response?
-      print_search_results
-      search_again_menu
-    else
-      search_error_message
-    end
-  end
-
-  # Asks APIService to find or create a search request, 
-  # prints response and asks if you want to do another search
-  # prints an error when invalid response or input error
-  def search_by_type
-    @api.find_or_create_search_request(@user_search_menu_input, "type")
-    if !(@user_search_menu_input.match?(/\d/)) && @api.valid_response?
-      print_search_results
-      search_again_menu
-    else
-      search_error_message
+  # validates that user isnt typing numbers for a name and letters for a number
+  def valid_input_type?
+    case @user_main_menu_input
+    when 1, 3
+      !@user_search_menu_input.match(/ \d/)
+    when 2
+      @user_search_menu_input.to_i > 0
     end
   end
 
