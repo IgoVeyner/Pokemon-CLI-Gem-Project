@@ -21,7 +21,7 @@ class CLI
     puts Spacer + "\nWelcome to the Pokemon CLI gem!".colorize(:light_black)
   end
 
-  # Prints main menu, asks for user input, exits when user input is '4'
+  # Prints main menu, asks for user input, breaks out of loop when user input is '4'
   def main_menu
     puts Spacer + "\nWhat Would you like to do today?\n" .colorize(:light_black)
     puts "1. Search Pokemon by Name"
@@ -40,11 +40,11 @@ class CLI
         end
       search_menu
     else 
-      menu_error_message unless @user_main_menu_input == 4
+      menu_error unless @user_main_menu_input == 4
     end
   end
 
-  # Prints the search menu, asks for input, returns to main menu when input is 'back'
+  # Prints the search menu, asks for input, returns to main_menu loop when input is 'back'
   def search_menu
     system("clear")
     @user_search_menu_input = nil
@@ -60,7 +60,7 @@ class CLI
             print_search_results
             search_again_menu
           else 
-            search_error_message
+            search_error
           end
         else
           input_type_error
@@ -118,7 +118,7 @@ class CLI
         system("clear")
         return
       else
-        menu_error_message
+        menu_error
       end
     end
     system("clear")
@@ -126,13 +126,13 @@ class CLI
   end
 
   # error message in main menu & search_again_menu
-  def menu_error_message
+  def menu_error
     system("clear")
     puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
   end
 
   # if user input creates bad response
-  def search_error_message
+  def search_error
     system("clear")
     puts Spacer + "\nSorry! ".colorize(:red) + @user_search_menu_input + " is not a valid input.".colorize(:red)
   end
