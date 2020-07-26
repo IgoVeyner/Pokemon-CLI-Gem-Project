@@ -3,7 +3,7 @@ require_relative 'lib/pokemon_cli_gem/version'
 Gem::Specification.new do |spec|
   spec.name          = "pokemon_cli_gem"
   spec.version       = PokemonCliGem::VERSION
-  spec.authors       = ["IgoVeyner"]
+  spec.authors       = ["Igor Veyner"]
   spec.email         = ["igorveyner95@gmail.com"]
 
   spec.summary       = %q{Pokemon CLI Gem Project}
@@ -26,4 +26,11 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "rake", "~> 12.0"
+  spec.add_development_dependency "pry"
+  spec.add_runtime_dependency 'require_all'
+  spec.add_runtime_dependency 'json'
+  spec.add_runtime_dependency 'colorize'
 end

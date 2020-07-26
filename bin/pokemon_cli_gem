@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative "../config/enviornment.rb"
+# require_relative "../config/enviornment.rb"
+require "bundler/setup"
+require "./lib/pokemon_cli_gem.rb"
 
 CLI.new.call

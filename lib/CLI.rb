@@ -5,6 +5,7 @@ class CLI
   attr_reader :user_main_menu_input, :user_search_menu_input, :api, :response
 
   def call
+    # binding.pry
     system("clear")
     @user_main_menu_input = nil
     @api = APIService.new
@@ -129,17 +130,20 @@ class CLI
       search_again_input = gets.chomp.downcase
 
       if search_again_input == "y" || search_again_input == "yes"
-        system("clear") ; return
+        system("clear")
+        return
       else 
         menu_error_message unless search_again_input == "n" || search_again_input == "no"
       end
     end
-    system("clear") ; "back"
+    system("clear")
+    "back"
   end
   
   
   def menu_error_message
-    system("clear") ; puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
+    system("clear")
+    puts Spacer + "\nSorry! I didn't understand that.".colorize(:red)
   end
 
 
