@@ -73,7 +73,7 @@ class CLI
   def search_pokemon_by_name 
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon") 
     if !(@user_search_menu_input.match(/ \d/)) && @api.valid_response?
-      print_pokemon_search
+      print_search_results
       search_again_menu
     else
       search_error_message
@@ -86,7 +86,7 @@ class CLI
   def search_pokemon_by_number
     @api.find_or_create_search_request(@user_search_menu_input, "pokemon")
     if @user_search_menu_input.to_i > 0 && @api.valid_response?
-      print_pokemon_search 
+      print_search_results
       search_again_menu
     else
       search_error_message
@@ -99,33 +99,21 @@ class CLI
   def search_by_type
     @api.find_or_create_search_request(@user_search_menu_input, "type")
     if !(@user_search_menu_input.match?(/\d/)) && @api.valid_response?
-      print_type_search 
+      print_search_results
       search_again_menu
     else
       search_error_message
     end
   end
 
-    # These two methods could be combined into one
-    # APIService could handle which method to use if I made a response_type instance variable for it
-    # or this class can, it's not the APIService's job to handle that...
-    # Would be relying on conditional statement again...
-    # Is that good design?
-    # Will it make adding features easier?
-    # Probably ok to do it..
-
-  # Asks api to read the response
-  def print_pokemon_search
+  # Prints appropriate search response
+  def print_search_results
     system("clear") 
     puts Spacer
-    @api.read_pokemon_response
-  end
-
-  # Asks api to read the response
-  def print_type_search
-    system("clear")
-    puts Spacer
-    @api.read_type_response
+    if @user_main_menu_input == 1 || @user_main_menu_input == 2
+      @api.read_pokemon_response 
+    end
+    @api.read_type_response if @user_main_menu_input == 3
   end
 
   # Prints propmt for search menu, checks instance variable for correct search type in prompt
