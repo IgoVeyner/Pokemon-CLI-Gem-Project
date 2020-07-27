@@ -3,28 +3,48 @@ class APIService
   attr_accessor :current_response, :search_history
 
   BASE_URI = "https://pokeapi.co/api/v2/"
+  Spacer = "-------------------------------------------------------------".colorize(:yellow)
 
   def initialize
     @search_history = []
   end
 
+
   # Custom find / create method
   def find_or_create_search_request(user_input, search_type)
+    puts Spacer
+    puts "Checking search history....".colorize(:light_black)
+
     prev_search = find_prev_search(user_input, search_type)
-    prev_search ? @current_response = prev_search[:response] : create_request(user_input, search_type)
+    if prev_search
+      puts Spacer
+      puts "Found it!".colorize(:light_green)
+      @current_response = prev_search[:response]
+    else
+      puts Spacer
+      puts "Not there...".colorize(:red)
+      create_request(user_input, search_type)
+    end
   end
+  
   
   # Looks inside search history array of hashes
   def find_prev_search(user_input, search_type)
     self.search_history.find {|h| h[:input] == user_input && h[:search_type] == search_type}
   end
 
+
   # Creates a new request and saves it into search history array
   def create_request(user_input, search_type)
     uri = URI(BASE_URI + "#{search_type}/#{user_input}/")
+
+    puts Spacer
+    puts "Searching API... Please Wait...".colorize(:light_black)
+
     @current_response = Net::HTTP.get_response(uri)
     save_search(user_input, search_type)
   end
+
 
   # Makes a new hash, saves the data from a search and adds it into search history
   def save_search(user_input, search_type)
@@ -36,10 +56,12 @@ class APIService
     end
   end
 
+
   # Checks to see if the response was successful
   def valid_response?
     @current_response.is_a?(Net::HTTPSuccess)
   end
+
 
   # Parses pokemon search response, instatiates new Pokemon & Type instances and prints out that Pokemon's data
   def read_pokemon_response
@@ -58,6 +80,7 @@ class APIService
     end
   end
   
+  
   # Pokedex entries require another API request from a supplied url
   # Grabs the english text and removes unessesary page break
   def read_pokedex_entry(url)
@@ -68,6 +91,7 @@ class APIService
     english_text["flavor_text"].gsub("\f", " ")
   end
 
+  
   # Reads type response and instantiates new Type / Pokemon instances from data.
   # Then prints all the Pokemon that belong to the Type
   def read_type_response

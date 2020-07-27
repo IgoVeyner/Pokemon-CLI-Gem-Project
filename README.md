@@ -1,8 +1,15 @@
 # PokemonCliGem
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pokemon_cli_gem`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to the Pokemon_Cli_gem.
 
-TODO: Delete this and the text above, and describe your gem
+This CLI Gem allows you to look up Pokemon by their name or Pokedex number or look up all the Pokemon that are of a type.
+
+Pokemon searches will display their name, type(s), pokedex entery, height and weight.
+Type searches will display all the pokemon of the type including variations. So if you search for Ice, ninetales-alola will be included as the alola variation of ninetales is an ice type.
+
+From the type search you can look up more info on those pokemon by entering its number on the list
+
+Hope you enjoy and please let me know if you would like a feature included.
 
 ## Installation
 
