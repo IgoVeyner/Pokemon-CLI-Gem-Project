@@ -120,7 +120,7 @@ class CLI
     system("clear") 
     puts Spacer
 
-    @api.read_pokemon_response if @search_type.match?(/^Pokemon Name$|^Pokedex Number/)
+    @api.read_pokemon_response if @search_type.match?(/^Pokemon Name$|^Pokedex Number$/)
     @api.read_type_response if @search_type.match?(/^Type$/)
   end
 
