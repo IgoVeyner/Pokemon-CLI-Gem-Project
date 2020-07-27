@@ -2,7 +2,7 @@ class CLI
   
   Spacer = "-------------------------------------------------------------".colorize(:yellow)
 
-  attr_reader :main_menu_input, :search_menu_input, :search_type, :api
+  attr_reader :main_menu_input, :search_menu_input, :search_type
 
   def call
     system("clear")
@@ -241,7 +241,7 @@ class CLI
     when "Pokedex Number"
       "letters"
     end
-    
+
     puts "Sorry! No #{type} please!".colorize(:red)
   end
 end
