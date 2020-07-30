@@ -69,12 +69,10 @@ class APIService
     Pokemon.find_or_create_by_name(parsed["name"]).tap do |p|
       p.height = parsed["height"]
       p.weight = parsed["weight"]
-      p.type1 = parsed["types"][0]["type"]["name"]
-      p.type2 = parsed["types"][1]["type"]["name"] if parsed["types"][1]
       p.pokedex_entry = read_pokedex_entry(parsed["species"]["url"])
-      parsed["types"].each do |type|
+      parsed["types"].each_with_index do |type, i|
         name = type["type"]["name"]
-        p.types << Type.find_or_create_through_pokemon_search(name, p) unless p.types.include?(Type.find_by_name(name))
+        p.types[i] = Type.find_or_create_through_pokemon_search(name, p)
       end
       print p.pretty_text
     end
