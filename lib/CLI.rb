@@ -144,7 +144,7 @@ class CLI
       print "Would you like to do another search? Y/N:".colorize(:light_black)
 
       search_again_input = gets.chomp.downcase   
-      search_again_input.match?(/^n$|^no$/) ? @search_menu_input = "back" : menu_error
+      search_again_input.match?(/^n$|^no$/) ? @search_menu_input = "back" : menu_error unless search_again_input.match?(/^yes$|^y$/)
     end
     system("clear")
   end
