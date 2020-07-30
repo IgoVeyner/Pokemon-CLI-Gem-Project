@@ -16,6 +16,7 @@ class CLI
     puts Spacer 
     puts "Goodbye!".colorize(:light_black)
     puts Spacer
+    binding.pry
   end
 
 
@@ -170,6 +171,7 @@ class CLI
       when @learn_more_input == "back" 
         system("clear")
         @search_menu_input = "back"
+        return
       when @learn_more_input == "again"
         system("clear")
       when @learn_more_input.to_i.between?(1, pokemon_array.size)
@@ -204,6 +206,7 @@ class CLI
       case @learn_more_input
       when "back"
         @search_menu_input = "back"
+        return
       when "again"
         @search_type = "Type"
         system("clear")
