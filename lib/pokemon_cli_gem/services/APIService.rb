@@ -72,7 +72,7 @@ class APIService
       p.pokedex_entry = read_pokedex_entry(parsed["species"]["url"])
       parsed["types"].each_with_index do |type, i|
         name = type["type"]["name"]
-        p.types[i] = Type.find_or_create_through_pokemon_search(name, p)
+        p.types_array[i] = Type.find_or_create_through_pokemon_search(name, p)
       end
       print p.pretty_text
     end
@@ -98,8 +98,8 @@ class APIService
     parsed["pokemon"].each do |pokemon|
       name = pokemon["pokemon"]["name"]
       pokemon = Pokemon.find_or_create_by_name(name)
-      pokemon.types << type unless pokemon.types.include?(type)
-      type.pokemon << pokemon unless type.pokemon.include?(pokemon)
+      pokemon.types_array << type unless pokemon.types_array.include?(type)
+      type.pokemon_array << pokemon unless type.pokemon_array.include?(pokemon)
     end
     type.print_all
   end

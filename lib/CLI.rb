@@ -155,7 +155,7 @@ class CLI
     @learn_more_input = ""
 
     last_search = @api.search_history.select{|s| s[:search_type] == "type"}.last[:input]
-    pokemon_array = Type.all.find{|t| t.name == last_search}.pokemon
+    pokemon_array = Type.all.find{|t| t.name == last_search}.pokemon_array
     
     until @learn_more_input.match?(/^again$|^back$/) || @learn_more_input.to_i.between?(1, pokemon_array.size)
       puts Spacer
