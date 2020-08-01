@@ -209,9 +209,8 @@ class CLI
         @search_menu_input = "back"
       when "again"
         @search_type = "Type"
-        system("clear")
       else 
-        menu_error 
+        menu_error unless @learn_more_input.match?(/^again$|^back$/)
       end
     end
   end
