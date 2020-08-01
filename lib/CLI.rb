@@ -16,6 +16,7 @@ class CLI
     puts Spacer 
     puts "Goodbye!".colorize(:light_black)
     puts Spacer
+    binding.pry
   end
 
 
@@ -65,16 +66,18 @@ class CLI
       search_prompt
       @search_menu_input = gets.chomp.downcase
 
-      if valid_input_type?
-        find_or_create_search_request
-        if @api.valid_response?
-          print_search_results
-          next_menu
+      unless @search_menu_input == 'back'
+        if valid_input_type?
+          find_or_create_search_request
+          if @api.valid_response?
+            print_search_results
+            next_menu
+          else 
+            search_error
+          end
         else 
-          search_error
+          type_error
         end
-      else 
-        type_error
       end
     end
     system("clear")
@@ -170,7 +173,6 @@ class CLI
       when @learn_more_input == "back" 
         system("clear")
         @search_menu_input = "back"
-        return
       when @learn_more_input == "again"
         system("clear")
       when @learn_more_input.to_i.between?(1, pokemon_array.size)
