@@ -159,7 +159,7 @@ class CLI
     
     until @learn_more_input.match?(/^again$|^back$/) || @learn_more_input.to_i.between?(1, pokemon_array.size)
       puts Spacer
-      puts "Enter the number a Pokemon".colorize(:light_black)
+      puts "Enter the number of a Pokemon".colorize(:light_black)
       puts "you would like to get more info on,".colorize(:light_black)
       puts "'again' to search again,".colorize(:light_black)
       print "or 'back' to go back to main menu.".colorize(:light_black)
