@@ -207,12 +207,11 @@ class CLI
       case @learn_more_input
       when "back"
         @search_menu_input = "back"
-        return
       when "again"
         @search_type = "Type"
         system("clear")
       else 
-        menu_error
+        menu_error 
       end
     end
   end
