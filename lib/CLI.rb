@@ -2,8 +2,6 @@ class CLI
   
   Spacer = "-------------------------------------------------------------".colorize(:yellow)
 
-  attr_reader :main_menu_input, :search_menu_input, :search_type, :api
-
   def call
     system("clear")
     @main_menu_input = nil
@@ -122,8 +120,13 @@ class CLI
     system("clear") 
     puts Spacer
 
-    @api.read_pokemon_response if @search_type.match?(/^Pokemon Name$|^Pokedex Number$/)
-    @api.read_type_response if @search_type.match?(/^Type$/)
+    if @search_type.match?(/^Pokemon Name$|^Pokedex Number$/)
+      pokemon_ins = @api.read_pokemon_response
+      pretty_text_pokemon(pokemon_ins) 
+    elsif @search_type.match?(/^Type$/)
+      type_ins = @api.read_type_response 
+      print_all_type(type_ins)
+    end
   end
 
 
@@ -244,5 +247,21 @@ class CLI
     end
     
     puts "Sorry! No #{type} please!".colorize(:red)
+  end
+
+  # Prints the Pokemon's data, nice and pretty
+  def pretty_text_pokemon(pokemon_ins)
+    puts "#{pokemon_ins.name.capitalize}\n"
+    print "Type: #{pokemon_ins.types_array[0].name.capitalize}" 
+    print "/#{pokemon_ins.types_array[1].name.capitalize}" if pokemon_ins.types_array[1] 
+    puts ""
+    puts "\n#{pokemon_ins.pokedex_entry}"
+    puts "\nHeight: #{(pokemon_ins.height *  3.937).round(2)} in / #{(pokemon_ins.height * 0.1).round(2)} m"
+    puts "Weight: #{(pokemon_ins.weight / 4.536).round(1)} lb / #{(pokemon_ins.weight * 0.1).round(2)} kg"
+  end
+
+  # Prints all the pokemon that belong to the current type instance
+  def print_all_type(type_ins)
+    type_ins.pokemon_array.each.with_index(1) {|p,i| puts "#{i}. #{p.name}"}
   end
 end

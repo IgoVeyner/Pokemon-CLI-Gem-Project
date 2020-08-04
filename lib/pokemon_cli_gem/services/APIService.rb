@@ -74,7 +74,6 @@ class APIService
         name = type["type"]["name"]
         p.types_array[i] = Type.find_or_create_through_pokemon_search(name, p)
       end
-      print p.pretty_text
     end
   end
   
@@ -92,15 +91,27 @@ class APIService
   
   # Reads type response and instantiates new Type / Pokemon instances from data.
   # Then prints all the Pokemon that belong to the Type
+  # def read_type_response
+  #   parsed = JSON.parse(@current_response.body)
+  #   type = Type.find_or_create_by_name(parsed["name"])
+  #   parsed["pokemon"].each do |pokemon|
+  #     name = pokemon["pokemon"]["name"]
+  #     pokemon = Pokemon.find_or_create_by_name(name)
+  #     pokemon.types_array << type unless pokemon.types_array.include?(type)
+  #     type.pokemon_array << pokemon unless type.pokemon_array.include?(pokemon)
+  #   end
+  #   type
+  # end
+
   def read_type_response
     parsed = JSON.parse(@current_response.body)
-    type = Type.find_or_create_by_name(parsed["name"])
-    parsed["pokemon"].each do |pokemon|
-      name = pokemon["pokemon"]["name"]
-      pokemon = Pokemon.find_or_create_by_name(name)
-      pokemon.types_array << type unless pokemon.types_array.include?(type)
-      type.pokemon_array << pokemon unless type.pokemon_array.include?(pokemon)
+    Type.find_or_create_by_name(parsed["name"]).tap do |type|
+      parsed["pokemon"].each do |pokemon|
+        name = pokemon["pokemon"]["name"]
+        pokemon = Pokemon.find_or_create_by_name(name)
+        pokemon.types_array << type unless pokemon.types_array.include?(type)
+        type.pokemon_array << pokemon unless type.pokemon_array.include?(pokemon)
+      end
     end
-    type.print_all
   end
 end
